@@ -335,6 +335,8 @@ void CSV::readCSV(std::vector<std::vector<std::unordered_map<std::string, Course
             ptrToSemesterMap[initializeCourse.year - 1][initializeCourse.semester - 1].emplace(initializeCourse.lessonName, std::move(initializeCourse));
             row++;
         }
+
+        courseSurfer.close();
     }
     else
     {
@@ -344,30 +346,38 @@ void CSV::readCSV(std::vector<std::vector<std::unordered_map<std::string, Course
 
 void CSV::storeCSV(std::vector<std::vector<std::unordered_map<std::string, Course>>>& ptrToSemesterMap)
 {
-    std::ofstream storeFile("course_table.csv");
-    storeFile << "Year,Semester,Course Name,Course Teacher,Lesson Amount,Credits,End of Term Exam,Required Attendance Rate,Required Submission Rate,Textbook Name,Extra Notes\n";
-    for (int i = 0; i < 4; i++)
+    std::ofstream storeFile;
+    storeFile.open("course_table.csv");
+    if (storeFile.is_open())
     {
-        for (int j = 0; j < 2; j++)
+        storeFile << "Year,Semester,Course Name,Course Teacher,Lesson Amount,Credits,End of Term Exam,Required Attendance Rate,Required Submission Rate,Textbook Name,Extra Notes\n";
+        for (int i = 0; i < 4; i++)
         {
-            for (const auto& [name, courses] : ptrToSemesterMap[i][j])
+            for (int j = 0; j < 2; j++)
             {
-                storeFile << courses.year << ",";
-                storeFile << courses.semester << ",";
-                storeFile << courses.lessonName << ",";
-                storeFile << courses.lessonTeacher << ",";
-                storeFile << courses.lessonCount << ",";
-                storeFile << courses.credits << ",";
-                storeFile << courses.endOfTermExam << ",";
-                storeFile << courses.requiredAttendanceRate << ",";
-                storeFile << courses.requiredSubmissionRate << ",";
-                storeFile << courses.textbookName << ",";
-                storeFile << courses.extraNotes << "\n";
+                for (const auto& [name, courses] : ptrToSemesterMap[i][j])
+                {
+                    storeFile << courses.year << ",";
+                    storeFile << courses.semester << ",";
+                    storeFile << courses.lessonName << ",";
+                    storeFile << courses.lessonTeacher << ",";
+                    storeFile << courses.lessonCount << ",";
+                    storeFile << courses.credits << ",";
+                    storeFile << courses.endOfTermExam << ",";
+                    storeFile << courses.requiredAttendanceRate << ",";
+                    storeFile << courses.requiredSubmissionRate << ",";
+                    storeFile << courses.textbookName << ",";
+                    storeFile << courses.extraNotes << "\n";
+                }
             }
         }
-    }
 
-    storeFile.close();
+        storeFile.close();
+    }
+    else
+    {
+        std::cout << "<<<CANNOT OPEN FILE>>>\n\n";
+    }
 }
 
 CSV& CSV::Get()
