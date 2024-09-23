@@ -1,11 +1,13 @@
-courseExplorer: courseExplorer.o course.o
-	g++ courseExplorer.o course.o -o courseExplorer
+objects = courseExplorer.o course.o
 
-courseExplorer.o: courseExplorer.cpp
+courseExplorer: $(objects)
+	g++ $(objects) -o courseExplorer
+
+courseExplorer.o: courseExplorer.cpp course.h
 	g++ -c courseExplorer.cpp
 
 course.o: course.cpp course.h
 	g++ -c course.cpp
 
 clean:
-	del -f *.o courseExplorer
+	del -f $(objects) courseExplorer.exe
