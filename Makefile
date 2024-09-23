@@ -8,4 +8,4 @@ course.o: course.cpp course.h
 	g++ -c course.cpp
 
 clean:
-	rm *.o courseExplorer
+	del -f *.o courseExplorer
